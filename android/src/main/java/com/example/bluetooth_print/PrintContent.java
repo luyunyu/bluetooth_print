@@ -102,7 +102,7 @@ public class PrintContent {
        * @return
        */
       public static Vector<Byte> mapToLabel(Map<String,Object> config, List<Map<String,Object>> list) {
-            LabelCommand tsc = new LabelCommand();
+            LabelNewCommand tsc = new LabelNewCommand();
 
             int width = (int)(config.get("width")==null?60:config.get("width")); // 单位：mm
             int height = (int)(config.get("height")==null?75:config.get("height")); // 单位：mm
@@ -142,7 +142,7 @@ public class PrintContent {
 
                         // 绘制简体中文
                         tsc.addText(x, y, font == null ?
-                                LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE : font,
+                               "TSS24.BF2" : font,
                                 LabelCommand.ROTATION.ROTATION_0, x_multiplication, y_multiplication, content);
                         //打印繁体
                         //tsc.addUnicodeText(10,32, LabelCommand.FONTTYPE.TRADITIONAL_CHINESE, LabelCommand.ROTATION.ROTATION_0, LabelCommand.FONTMUL.MUL_1, LabelCommand.FONTMUL.MUL_1,"BIG5碼繁體中文字元","BIG5");
