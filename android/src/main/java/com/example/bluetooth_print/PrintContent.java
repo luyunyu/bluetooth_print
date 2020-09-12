@@ -133,8 +133,17 @@ public class PrintContent {
                   int y = (int)(m.get("y")==null?0:m.get("y"));
 
                   if("text".equals(type)){
+                        String font = (String)m.get("font");
+
+                        int x_multiplication = (int)(m.get("x-multiplication") == null ? 1
+                                : m.get("x-multiplication"));
+                        int y_multiplication = (int)(m.get("y-multiplication") == null ? 1
+                                : m.get("y-multiplication"));
+
                         // 绘制简体中文
-                        tsc.addText(x, y, LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE, LabelCommand.ROTATION.ROTATION_0, LabelCommand.FONTMUL.MUL_3, LabelCommand.FONTMUL.MUL_3, content);
+                        tsc.addText(x, y, font == null ?
+                                LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE : font,
+                                LabelCommand.ROTATION.ROTATION_0, x_multiplication, y_multiplication, content);
                         //打印繁体
                         //tsc.addUnicodeText(10,32, LabelCommand.FONTTYPE.TRADITIONAL_CHINESE, LabelCommand.ROTATION.ROTATION_0, LabelCommand.FONTMUL.MUL_1, LabelCommand.FONTMUL.MUL_1,"BIG5碼繁體中文字元","BIG5");
                         //打印韩文
@@ -142,7 +151,8 @@ public class PrintContent {
                   }else if("barcode".equals(type)){
                         tsc.add1DBarcode(x, y, LabelCommand.BARCODETYPE.CODE128, 100, LabelCommand.READABEL.EANBEL, LabelCommand.ROTATION.ROTATION_0, "SMARNET");
                   }else if("qrcode".equals(type)){
-                        tsc.addQRCode(x,y, LabelCommand.EEC.LEVEL_L, 5, LabelCommand.ROTATION.ROTATION_0, content);
+                        int size = (int)(m.get("size") == null ? 5 : m.get("size"));
+                        tsc.addQRCode(x,y, LabelCommand.EEC.LEVEL_L, size, LabelCommand.ROTATION.ROTATION_0, content);
                   }else if("image".equals(type)){
                         byte[] bytes = Base64.decode(content, Base64.DEFAULT);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);

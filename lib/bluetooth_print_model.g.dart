@@ -66,5 +66,9 @@ Map<String, dynamic> _$LineTextToJson(LineText instance) {
   writeNotNull('linefeed', instance.linefeed);
   writeNotNull('x', instance.x);
   writeNotNull('y', instance.y);
+
+  writeNotNull('font', instance.fontSize.font);
+  writeNotNull('x-multiplication', instance.fontSize.mul);
+  writeNotNull('y-multiplication', instance.fontSize.mul);
   return val;
 }
