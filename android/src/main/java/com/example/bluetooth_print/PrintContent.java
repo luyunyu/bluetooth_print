@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import com.gprinter.command.CpclCommand;
 import com.gprinter.command.EscCommand;
-import com.gprinter.command.LabelCommand;
 
 import java.util.List;
 import java.util.Map;
@@ -86,7 +85,7 @@ public class PrintContent {
             esc.addPrintAndFeedLines((byte) 4);
 
             // 开钱箱
-            esc.addGeneratePlus(LabelCommand.FOOT.F2, (byte) 255, (byte) 255);
+            esc.addGeneratePlus(com.gprinter.command.LabelCommand.FOOT.F2, (byte) 255, (byte) 255);
             //开启切刀
             esc.addCutPaper();
             //添加缓冲区打印完成查询
@@ -102,7 +101,7 @@ public class PrintContent {
        * @return
        */
       public static Vector<Byte> mapToLabel(Map<String,Object> config, List<Map<String,Object>> list) {
-            LabelNewCommand tsc = new LabelNewCommand();
+            LabelCommand tsc = new LabelCommand();
 
             int width = (int)(config.get("width")==null?60:config.get("width")); // 单位：mm
             int height = (int)(config.get("height")==null?75:config.get("height")); // 单位：mm
@@ -113,13 +112,13 @@ public class PrintContent {
             // 设置标签间隙，按照实际尺寸设置，如果为无间隙纸则设置为0 单位mm
             tsc.addGap(gap);
             // 设置打印方向
-            tsc.addDirection(LabelCommand.DIRECTION.FORWARD, LabelCommand.MIRROR.NORMAL);
+            tsc.addDirection(com.gprinter.command.LabelCommand.DIRECTION.FORWARD, com.gprinter.command.LabelCommand.MIRROR.NORMAL);
             // 开启带Response的打印，用于连续打印
-            tsc.addQueryPrinterStatus(LabelCommand.RESPONSE_MODE.ON);
+            tsc.addQueryPrinterStatus(com.gprinter.command.LabelCommand.RESPONSE_MODE.ON);
             // 设置原点坐标
             tsc.addReference(0, 0);
             //设置浓度
-            tsc.addDensity(LabelCommand.DENSITY.DNESITY4);
+            tsc.addDensity(com.gprinter.command.LabelCommand.DENSITY.DNESITY4);
             // 撕纸模式开启
             tsc.addTear(EscCommand.ENABLE.ON);
             // 清除打印缓冲区
@@ -149,14 +148,14 @@ public class PrintContent {
                         //打印韩文
                         //tsc.addUnicodeText(10,60, LabelCommand.FONTTYPE.KOREAN, LabelCommand.ROTATION.ROTATION_0, LabelCommand.FONTMUL.MUL_1, LabelCommand.FONTMUL.MUL_1,"Korean 지아보 하성","EUC_KR");
                   }else if("barcode".equals(type)){
-                        tsc.add1DBarcode(x, y, LabelCommand.BARCODETYPE.CODE128, 100, LabelCommand.READABEL.EANBEL, LabelCommand.ROTATION.ROTATION_0, "SMARNET");
+                        tsc.add1DBarcode(x, y, com.gprinter.command.LabelCommand.BARCODETYPE.CODE128, 100, com.gprinter.command.LabelCommand.READABEL.EANBEL, com.gprinter.command.LabelCommand.ROTATION.ROTATION_0, "SMARNET");
                   }else if("qrcode".equals(type)){
                         int size = (int)(m.get("size") == null ? 5 : m.get("size"));
-                        tsc.addQRCode(x,y, LabelCommand.EEC.LEVEL_L, size, LabelCommand.ROTATION.ROTATION_0, content);
+                        tsc.addQRCode(x,y, com.gprinter.command.LabelCommand.EEC.LEVEL_L, size, com.gprinter.command.LabelCommand.ROTATION.ROTATION_0, content);
                   }else if("image".equals(type)){
                         byte[] bytes = Base64.decode(content, Base64.DEFAULT);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        tsc.addBitmap(x, y, LabelCommand.BITMAP_MODE.OVERWRITE, 300, bitmap);
+                        tsc.addBitmap(x, y, com.gprinter.command.LabelCommand.BITMAP_MODE.OVERWRITE, 300, bitmap);
                   }
             }
 
@@ -165,7 +164,7 @@ public class PrintContent {
             // 打印标签后 蜂鸣器响
             tsc.addSound(2, 100);
             //开启钱箱
-            tsc.addCashdrwer(LabelCommand.FOOT.F5, 255, 255);
+            tsc.addCashdrwer(com.gprinter.command.LabelCommand.FOOT.F5, 255, 255);
             // 发送数据
             return  tsc.getCommand();
       }
