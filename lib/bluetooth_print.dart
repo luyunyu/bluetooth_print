@@ -14,6 +14,7 @@ class BluetoothPrint {
       const MethodChannel('$NAMESPACE/methods');
   static const EventChannel _stateChannel =
       const EventChannel('$NAMESPACE/state');
+
   Stream<MethodCall> get _methodStream => _methodStreamController.stream;
   final StreamController<MethodCall> _methodStreamController =
       StreamController.broadcast();
@@ -22,7 +23,7 @@ class BluetoothPrint {
     _channel.setMethodCallHandler((MethodCall call) {
       _methodStreamController.add(call);
       return;
-    });
+    } as Future<dynamic> Function(MethodCall)?);
   }
 
   static BluetoothPrint _instance = new BluetoothPrint._();
@@ -35,14 +36,16 @@ class BluetoothPrint {
   Future<bool> get isOn async =>
       await _channel.invokeMethod('isOn').then<bool>((d) => d);
 
-  Future<bool> get isConnected async =>
+  Future<bool?> get isConnected async =>
       await _channel.invokeMethod('isConnected');
 
   BehaviorSubject<bool> _isScanning = BehaviorSubject.seeded(false);
+
   Stream<bool> get isScanning => _isScanning.stream;
 
   BehaviorSubject<List<BluetoothDevice>> _scanResults =
       BehaviorSubject.seeded([]);
+
   Stream<List<BluetoothDevice>> get scanResults => _scanResults.stream;
 
   PublishSubject _stopScanPill = new PublishSubject();
@@ -57,7 +60,7 @@ class BluetoothPrint {
   /// Starts a scan for Bluetooth Low Energy devices
   /// Timeout closes the stream after a specified [Duration]
   Stream<BluetoothDevice> scan({
-    Duration timeout,
+    Duration? timeout,
   }) async* {
     if (_isScanning.value == true) {
       throw Exception('Another scan is already in progress.');
@@ -110,7 +113,7 @@ class BluetoothPrint {
   }
 
   Future startScan({
-    Duration timeout,
+    Duration? timeout,
   }) async {
     await scan(timeout: timeout).drain();
     return _scanResults.value;
