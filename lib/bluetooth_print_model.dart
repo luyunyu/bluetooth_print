@@ -53,7 +53,7 @@ class LineText {
   final int? x;
   final int? y;
 
-  final FontSized fontSize;
+  final FontSized? fontSize;
 
   factory LineText.fromJson(Map<String, dynamic> json) =>
       _$LineTextFromJson(json);
