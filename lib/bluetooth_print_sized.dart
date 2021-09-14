@@ -2,11 +2,11 @@
 
 class FontSized {
 
-  String font;
+  final String font;
 
-  int mul;
+  final int mul;
 
-  FontSized._(this.font, this.mul);
+  FontSized._(this.font = 'TSS16.BF2', this.mul = 1);
 
   // TSS16.BF2简体中文16×16（GB码）
   // TSS20.BF2简体中文20×20（GB码）
